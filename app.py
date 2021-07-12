@@ -1,0 +1,62 @@
+from __future__ import division, print_function
+# coding=utf-8
+import sys
+import os
+import glob
+import re
+import numpy as np
+import AksharaJaana.main as ak
+from googletrans import Translator
+
+
+# Flask utils
+from flask import Flask, redirect, url_for, request, render_template
+from werkzeug.utils import secure_filename
+from gevent.pywsgi import WSGIServer
+
+# Define a flask app
+app = Flask(__name__)
+
+# Model saved with Keras model.save()
+translator = Translator()
+
+print('translator initialise')
+
+
+@app.route('/', methods=['GET'])
+def index():
+    # Main page
+    return render_template('index.html')
+
+
+@app.route('/predict', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST':
+        # Get the file from post request
+        f = request.files['file']
+
+        # Save the file to ./uploads
+        basepath = os.path.dirname(__file__)
+        file_path = os.path.join(
+            basepath, 'uploads', secure_filename(f.filename))
+        f.save(file_path)
+        
+        result=''
+
+        lines = ak.ocr_engine(file_path)
+        n=4000
+        res = [lines[i:i+n] for i in range(0, len(lines), n)]
+        detlang = translator.detect(lines[0:1000]).lang
+        for i in range(len(res)):
+            if detlang == 'kn':
+                res[i]=translator.translate(res[i], dest='en')
+            result+= str(res[i])
+ 
+        shutil.rmtree(os.path.join(basepath,'output'))
+        return result
+    return None
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
