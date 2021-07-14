@@ -7,6 +7,7 @@ import re
 import cv2
 import pytesseract
 import numpy as np
+from pdf2image import convert_from_path
 import AksharaJaana.main as ak
 from googletrans import Translator
 import shutil
@@ -76,10 +77,30 @@ def api():
         f.save(file_path)
         print(4)
         result=''
-        img = cv2.imread(file_path)
-        print(7)
-        #lines = str(pytesseract.image_to_string(img,lang='kan')) #ak.ocr_engine(file_path)
-        lines = ak.ocr_engine(file_path)
+        if '.pdf' in file_path:
+            pages = convert_from_path(file_path, 500)
+            image_counter = 1
+            
+            # Iterate through all the pages stored above
+            for page in pages:
+
+                filename = os.path.join(basepath, 'uploads',"page_"+str(image_counter)+".jpg")      
+                page.save(filename, 'JPEG')  
+                image_counter = image_counter + 1
+
+            filelimit = image_counter-1
+                
+            for i in range(1, filelimit + 1):
+
+                filename = os.path.join(basepath, 'uploads',"page_"+str(i)+".jpg")  
+                img = cv2.imread(filename)
+                text = str(pytesseract.image_to_string(img,lang='kan'))
+
+        else: 
+            img = cv2.imread(file_path)
+            text = str(pytesseract.image_to_string(img,lang='kan'))
+
+        lines = text
         n=4000
         print(5)
         res = [lines[i:i+n] for i in range(0, len(lines), n)]
