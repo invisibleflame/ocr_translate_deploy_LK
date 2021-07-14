@@ -8,3 +8,8 @@ numpy
 AksharaJaana
 Werkzeug
 Flask
+python-firebase
+config
+pydub
+pyquery
+opencv-python-headless==4.2.0.32
