@@ -7,3 +7,10 @@ Flask
 numpy
 AksharaJaana
 Werkzeug
+Flask
+python-firebase
+config
+imgurpython
+pydub
+pyquery
+pillow
