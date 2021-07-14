@@ -4,6 +4,7 @@ import sys
 import os
 import glob
 import re
+import cv2
 import pytesseract
 import numpy as np
 import AksharaJaana.main as ak
@@ -75,8 +76,8 @@ def api():
         f.save(file_path)
         print(4)
         result=''
-
-        lines = ak.ocr_engine(file_path)
+        img = cv2.imread(file_path)
+        lines = str(pytesseract.image_to_string(img,lang='kan')) #ak.ocr_engine(file_path)
         n=4000
         print(5)
         res = [lines[i:i+n] for i in range(0, len(lines), n)]
