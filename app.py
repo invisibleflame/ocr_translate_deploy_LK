@@ -24,6 +24,8 @@ translator = Translator()
 print('translator initialise')
 pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
 
+port = int(os.environ.get('PORT', 5000))
+
 @app.route('/', methods=['GET'])
 def index():
     # Main page
@@ -88,5 +90,5 @@ def api():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True)
 
