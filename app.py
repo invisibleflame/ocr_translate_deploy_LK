@@ -4,6 +4,7 @@ import sys
 import os
 import glob
 import re
+import pytesseract
 import numpy as np
 import AksharaJaana.main as ak
 from googletrans import Translator
@@ -24,7 +25,7 @@ translator = Translator()
 print('translator initialise')
 pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
 
-port = int(os.environ.get('PORT', 5000))
+port = int(os.environ.get('PORT'))
 
 @app.route('/', methods=['GET'])
 def index():
