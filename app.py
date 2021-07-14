@@ -7,6 +7,7 @@ import re
 import numpy as np
 import AksharaJaana.main as ak
 from googletrans import Translator
+import shutil
 
 
 # Flask utils
@@ -21,7 +22,7 @@ app = Flask(__name__)
 translator = Translator()
 
 print('translator initialise')
-
+pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
 
 @app.route('/', methods=['GET'])
 def index():
@@ -48,16 +49,17 @@ def upload():
         res = [lines[i:i+n] for i in range(0, len(lines), n)]
         detlang = translator.detect(lines[0:1000]).lang
         for i in range(len(res)):
-            if detlang == 'kn':
+            if detlang != 'en':
                 res[i]=translator.translate(res[i], dest='en')
             result+= str(res[i])
  
         shutil.rmtree(os.path.join(basepath,'output'))
+        os.remove(file_path)
         return result
     return None
 
 @app.route('/api', methods=['GET', 'POST'])
-def upload():
+def api():
     if request.method == 'POST':
         # Get the file from post request
         f = request.files['file']
@@ -75,11 +77,12 @@ def upload():
         res = [lines[i:i+n] for i in range(0, len(lines), n)]
         detlang = translator.detect(lines[0:1000]).lang
         for i in range(len(res)):
-            if detlang == 'kn':
+            if detlang != 'en':
                 res[i]=translator.translate(res[i], dest='en')
             result+= str(res[i])
  
         shutil.rmtree(os.path.join(basepath,'output'))
+        os.remove(file_path)
         return result
     return None
 
