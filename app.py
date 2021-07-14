@@ -78,7 +78,8 @@ def api():
         result=''
         img = cv2.imread(file_path)
         print(7)
-        lines = str(pytesseract.image_to_string(img,lang='kan')) #ak.ocr_engine(file_path)
+        #lines = str(pytesseract.image_to_string(img,lang='kan')) #ak.ocr_engine(file_path)
+        lines = ak.ocr_engine(file_path)
         n=4000
         print(5)
         res = [lines[i:i+n] for i in range(0, len(lines), n)]
