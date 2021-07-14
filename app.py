@@ -80,14 +80,14 @@ def api():
         if '.pdf' in file_path:
             pages = convert_from_path(file_path, 500)
             image_counter = 1
-            
+            print(6)
             # Iterate through all the pages stored above
             for page in pages:
 
                 filename = os.path.join(basepath, 'uploads',"page_"+str(image_counter)+".jpg")      
                 page.save(filename, 'JPEG')  
                 image_counter = image_counter + 1
-
+            print(7)
             filelimit = image_counter-1
                 
             for i in range(1, filelimit + 1):
@@ -95,7 +95,7 @@ def api():
                 filename = os.path.join(basepath, 'uploads',"page_"+str(i)+".jpg")  
                 img = cv2.imread(filename)
                 text = str(pytesseract.image_to_string(img,lang='kan'))
-
+            print(8)
         else: 
             img = cv2.imread(file_path)
             text = str(pytesseract.image_to_string(img,lang='kan'))
