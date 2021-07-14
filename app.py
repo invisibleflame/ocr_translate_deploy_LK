@@ -77,6 +77,7 @@ def api():
         print(4)
         result=''
         img = cv2.imread(file_path)
+        print(7)
         lines = str(pytesseract.image_to_string(img,lang='kan')) #ak.ocr_engine(file_path)
         n=4000
         print(5)
