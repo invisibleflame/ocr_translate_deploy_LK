@@ -1,1 +1,1 @@
-web: gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b :$PORT app:app
+web: gunicorn -w 4 --worker-class gevent -b :$PORT app:app
