@@ -64,28 +64,32 @@ def upload():
 @app.route('/api', methods=['GET', 'POST'])
 def api():
     if request.method == 'POST':
+        print(2)
         # Get the file from post request
         f = request.files['file']
-
+        print(3)
         # Save the file to ./uploads
         basepath = os.path.dirname(__file__)
         file_path = os.path.join(
             basepath, 'uploads', secure_filename(f.filename))
         f.save(file_path)
-        
+        print(4)
         result=''
 
         lines = ak.ocr_engine(file_path)
         n=4000
+        print(5)
         res = [lines[i:i+n] for i in range(0, len(lines), n)]
         detlang = translator.detect(lines[0:1000]).lang
+        print(6)
         for i in range(len(res)):
             if detlang != 'en':
                 res[i]=translator.translate(res[i], dest='en')
             result+= str(res[i])
- 
+        print(7)
         shutil.rmtree(os.path.join(basepath,'output'))
         os.remove(file_path)
+        print(8)
         return result
     return None
 
